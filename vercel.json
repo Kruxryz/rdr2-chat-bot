@@ -1,0 +1,8 @@
+{
+  "functions": {
+    "app.py": {
+      "includeFiles": "templates/**",
+      "maxDuration": 60
+    }
+  }
+}

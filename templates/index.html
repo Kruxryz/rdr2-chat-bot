@@ -1,0 +1,457 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Vahşi Batı Kampı — 1899</title>
+  <style>
+    :root {
+      --ink: #ece0c6;
+      --ink-dim: #a08e6e;
+      --bg: #150f0b;
+      --panel: #221913;
+      --panel-2: #2c2018;
+      --line: #4a3527;
+      --accent: #c9762c;
+      --ember: #ff8c32;
+      --blood: #a8342a;
+    }
+
+    * { box-sizing: border-box; }
+
+    body {
+      margin: 0;
+      min-height: 100vh;
+      font-family: Georgia, "Times New Roman", serif;
+      color: var(--ink);
+      background:
+        radial-gradient(ellipse at 50% -20%, #46301c 0%, transparent 58%),
+        radial-gradient(ellipse at 50% 115%, rgba(201,118,44,.25) 0%, transparent 55%),
+        repeating-linear-gradient(45deg, rgba(255,255,255,.014) 0 2px, transparent 2px 7px),
+        var(--bg);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    .app {
+      width: 100%;
+      max-width: 760px;
+      height: min(90vh, 820px);
+      display: flex;
+      flex-direction: column;
+      background: var(--panel);
+      border: 2px solid var(--line);
+      outline: 1px solid rgba(201,118,44,.25);
+      outline-offset: 4px;
+      border-radius: 6px;
+      box-shadow: 0 22px 60px rgba(0,0,0,.75), inset 0 0 70px rgba(0,0,0,.5);
+      overflow: hidden;
+    }
+
+    /* ---------- üst bar ---------- */
+    header {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 14px;
+      padding: 14px 18px;
+      border-bottom: 2px solid var(--line);
+      background: linear-gradient(180deg, #33251a, var(--panel));
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 19px;
+      letter-spacing: 2.5px;
+      text-transform: uppercase;
+      color: var(--accent);
+      text-shadow: 0 1px 0 #000, 0 0 22px rgba(201,118,44,.35);
+    }
+
+    header p {
+      margin: 5px 0 0;
+      font-size: 12px;
+      letter-spacing: .6px;
+      color: var(--ink-dim);
+      max-width: 380px;
+      line-height: 1.5;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-shrink: 0;
+    }
+
+    .year-badge {
+      padding: 6px 11px;
+      font-size: 13px;
+      letter-spacing: 2px;
+      color: var(--ink);
+      background: #1a1209;
+      border: 1px solid var(--line);
+      border-radius: 3px;
+      box-shadow: inset 0 0 12px rgba(0,0,0,.7);
+    }
+
+    .burn {
+      padding: 7px 12px;
+      font-family: inherit;
+      font-size: 12px;
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      color: #f3d9c6;
+      background: linear-gradient(180deg, #7d2a22, #521a15);
+      border: 1px solid #39120e;
+      border-radius: 3px;
+      cursor: pointer;
+      transition: filter .15s ease, box-shadow .15s ease;
+    }
+
+    .burn:hover {
+      filter: brightness(1.25);
+      box-shadow: 0 0 14px rgba(255,140,50,.45);
+    }
+
+    /* ---------- karakterler ---------- */
+    .chars {
+      display: flex;
+      gap: 10px;
+      padding: 12px 14px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(0,0,0,.22);
+      overflow-x: auto;
+    }
+
+    .char {
+      flex: 1 1 0;
+      min-width: 150px;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      cursor: pointer;
+      text-align: left;
+      padding: 9px 11px;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      background: var(--panel-2);
+      color: var(--ink-dim);
+      font-family: inherit;
+      transition: all .16s ease;
+    }
+
+    .char .monogram {
+      flex-shrink: 0;
+      width: 34px;
+      height: 34px;
+      display: grid;
+      place-items: center;
+      font-size: 12px;
+      letter-spacing: 1px;
+      color: var(--ink-dim);
+      border: 1px dashed var(--line);
+      border-radius: 50%;
+      background: #1a1209;
+    }
+
+    .char strong { display: block; font-size: 13.5px; color: var(--ink); }
+    .char em {
+      display: block;
+      margin-top: 2px;
+      font-size: 10.5px;
+      font-style: normal;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+    }
+
+    .char:hover { border-color: var(--accent); transform: translateY(-1px); }
+
+    .char.active {
+      background: linear-gradient(180deg, #432c19, #33220f);
+      border-color: var(--accent);
+      box-shadow: inset 0 0 20px rgba(201,118,44,.25), 0 0 12px rgba(201,118,44,.18);
+    }
+
+    .char.active .monogram { border-style: solid; border-color: var(--accent); color: var(--accent); }
+
+    /* ---------- sohbet ---------- */
+    .chat {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 13px;
+      transition: opacity .4s ease, filter .4s ease, transform .4s ease;
+    }
+
+    .chat.burning { opacity: 0; filter: sepia(1) hue-rotate(-25deg) brightness(1.9); transform: translateY(-8px); }
+
+    .row { display: flex; gap: 9px; align-items: flex-end; }
+    .row.user { justify-content: flex-end; }
+    .row.note { justify-content: center; }
+    .row.err { justify-content: center; }
+
+    .avatar {
+      flex-shrink: 0;
+      width: 30px;
+      height: 30px;
+      display: grid;
+      place-items: center;
+      font-size: 10.5px;
+      letter-spacing: .5px;
+      color: var(--accent);
+      border: 1px solid var(--line);
+      border-radius: 50%;
+      background: #1a1209;
+    }
+
+    .bubble {
+      position: relative;
+      max-width: 78%;
+      padding: 10px 13px;
+      border: 1px solid var(--line);
+      border-radius: 5px;
+      font-size: 15px;
+      line-height: 1.55;
+      white-space: pre-wrap;
+      word-wrap: break-word;
+    }
+
+    .bubble .who {
+      display: block;
+      margin-bottom: 5px;
+      font-size: 10px;
+      letter-spacing: 1.5px;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+    }
+
+    .bubble.bot { background: var(--panel-2); border-left: 2px solid var(--accent); }
+    .bubble.bot .who { color: var(--accent); }
+
+    .bubble.user {
+      background: #30241a;
+      border-color: #5a4028;
+      border-right: 2px solid #7d5a34;
+    }
+
+    .bubble.typing { color: var(--ink-dim); font-style: italic; font-size: 13px; }
+
+    .bubble.note {
+      max-width: 92%;
+      padding: 7px 14px;
+      font-size: 12.5px;
+      font-style: italic;
+      color: var(--ink-dim);
+      background: rgba(0,0,0,.28);
+      border-style: dashed;
+      border-radius: 20px;
+    }
+
+    .bubble.err {
+      max-width: 100%;
+      font-size: 13px;
+      color: #f4bcb4;
+      background: rgba(168,52,42,.18);
+      border-color: var(--blood);
+    }
+
+    /* ---------- giriş ---------- */
+    form {
+      display: flex;
+      gap: 10px;
+      padding: 12px 14px 14px;
+      border-top: 2px solid var(--line);
+      background: linear-gradient(0deg, #31241a, var(--panel));
+    }
+
+    input[type="text"] {
+      flex: 1;
+      padding: 11px 13px;
+      font-family: inherit;
+      font-size: 15px;
+      color: var(--ink);
+      background: #150e09;
+      border: 1px solid var(--line);
+      border-radius: 4px;
+      outline: none;
+      box-shadow: inset 0 2px 8px rgba(0,0,0,.6);
+    }
+
+    input[type="text"]:focus { border-color: var(--accent); }
+
+    button.send {
+      padding: 11px 20px;
+      font-family: inherit;
+      font-size: 13.5px;
+      letter-spacing: 1.2px;
+      text-transform: uppercase;
+      color: #1a120b;
+      background: linear-gradient(180deg, #dd9040, var(--accent));
+      border: 1px solid #8c5318;
+      border-radius: 4px;
+      cursor: pointer;
+      transition: filter .15s ease;
+    }
+
+    button.send:hover { filter: brightness(1.12); }
+    button.send:disabled { opacity: .45; cursor: not-allowed; }
+
+    .chat::-webkit-scrollbar, .chars::-webkit-scrollbar { width: 8px; height: 8px; }
+    .chat::-webkit-scrollbar-thumb, .chars::-webkit-scrollbar-thumb {
+      background: var(--line);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body>
+  <div class="app">
+    <header>
+      <div>
+        <h1>Vahşi Batı Kampı</h1>
+        <p id="subtitle">Kamp ateşinin başında kiminle konuşmak istersin?</p>
+      </div>
+      <div class="header-right">
+        <span class="year-badge" id="yearBadge">1899</span>
+        <button class="burn" type="button" id="burn" title="Sohbeti ateşe ver">Sohbeti Yak</button>
+      </div>
+    </header>
+
+    <div class="chars" id="chars">
+      {% for key, p in personas.items() %}
+      <button class="char{% if loop.first %} active{% endif %}" type="button"
+              data-key="{{ key }}" data-name="{{ p.name }}" data-year="{{ p.year }}" data-short="{{ p.short }}">
+        <span class="monogram">{{ p.short }}</span>
+        <span>
+          <strong>{{ p.name }}</strong>
+          <em>{{ p.title }} · {{ p.year }}</em>
+        </span>
+      </button>
+      {% endfor %}
+    </div>
+
+    <div class="chat" id="chat">
+      <div class="row note">
+        <div class="bubble note">Kamp ateşi çıtırdıyor. Yukarıdan birini seç, sonra lafa gir.</div>
+      </div>
+    </div>
+
+    <form id="form" autocomplete="off">
+      <input type="text" id="input" placeholder="Bir şeyler yaz, evlat..." maxlength="400">
+      <button class="send" type="submit" id="send">Gönder</button>
+    </form>
+  </div>
+
+  <script>
+    const chatEl = document.getElementById('chat');
+    const formEl = document.getElementById('form');
+    const inputEl = document.getElementById('input');
+    const sendEl = document.getElementById('send');
+    const charsEl = document.getElementById('chars');
+    const burnEl = document.getElementById('burn');
+    const yearBadge = document.getElementById('yearBadge');
+    const subtitle = document.getElementById('subtitle');
+
+    const activeBtn = () => charsEl.querySelector('.char.active');
+
+    let character = activeBtn().dataset.key;
+    let busy = false;
+
+    function useCharacter(btn) {
+      charsEl.querySelectorAll('.char').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      character = btn.dataset.key;
+      yearBadge.textContent = btn.dataset.year;
+      subtitle.textContent = btn.dataset.year + ' — ateşin başında ' +
+        btn.dataset.name + ' ile konuşuyorsun.';
+      inputEl.placeholder = 'Bir şeyler yaz, ' + (btn.dataset.name.startsWith('John') ? 'bay' : 'evlat') + '...';
+    }
+
+    charsEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('.char');
+      if (btn) useCharacter(btn);
+    });
+
+    function addMessage(text, kind, who, initials) {
+      const row = document.createElement('div');
+      row.className = 'row ' + kind;
+
+      if (kind === 'bot') {
+        const av = document.createElement('div');
+        av.className = 'avatar';
+        av.textContent = initials || '··';
+        row.appendChild(av);
+      }
+
+      const bubble = document.createElement('div');
+      bubble.className = 'bubble ' + kind + (kind === 'bot' && text === '…' ? ' typing' : '');
+      if (who) {
+        const label = document.createElement('span');
+        label.className = 'who';
+        label.textContent = who;
+        bubble.appendChild(label);
+      }
+      bubble.appendChild(document.createTextNode(text));
+      row.appendChild(bubble);
+
+      chatEl.appendChild(row);
+      chatEl.scrollTop = chatEl.scrollHeight;
+      return row;
+    }
+
+    function burnChat() {
+      if (busy) return;
+      chatEl.classList.add('burning');
+      setTimeout(() => {
+        chatEl.innerHTML = '';
+        chatEl.classList.remove('burning');
+        addMessage('Sohbeti ateşe attın, kül oldu. Baştan başlayalım.', 'note');
+      }, 420);
+    }
+
+    burnEl.addEventListener('click', burnChat);
+
+    formEl.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      const message = inputEl.value.trim();
+      if (!message || busy) return;
+
+      busy = true;
+      sendEl.disabled = true;
+      inputEl.value = '';
+      addMessage(message, 'user');
+
+      const btn = activeBtn();
+      const loading = addMessage('…', 'bot', btn.dataset.name + ' · ' + btn.dataset.year, btn.dataset.short);
+
+      try {
+        const res = await fetch('/chat', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ message: message, character: character })
+        });
+        const data = await res.json().catch(() => ({}));
+        loading.remove();
+
+        if (!res.ok || data.error) {
+          addMessage(data.error || 'Bilinmeyen bir hata oluştu.', 'err');
+        } else {
+          addMessage(data.reply, 'bot', data.name + ' · ' + data.year, data.short);
+        }
+      } catch (err) {
+        loading.remove();
+        addMessage('Bağlantı kurulamadı: ' + err.message, 'err');
+      } finally {
+        busy = false;
+        sendEl.disabled = false;
+        inputEl.focus();
+      }
+    });
+  </script>
+</body>
+</html>

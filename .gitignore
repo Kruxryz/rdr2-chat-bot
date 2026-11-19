@@ -1,0 +1,7 @@
+.vercel
+.env*
+.ghconfig
+.venv
+__pycache__
+*.pyc
+.idea
