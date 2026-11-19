@@ -6,48 +6,103 @@
   <title>Vahşi Batı Kampı — 1899</title>
   <style>
     :root {
-      --ink: #ece0c6;
-      --ink-dim: #a08e6e;
-      --bg: #150f0b;
-      --panel: #221913;
-      --panel-2: #2c2018;
-      --line: #4a3527;
-      --accent: #c9762c;
-      --ember: #ff8c32;
-      --blood: #a8342a;
+      --ink: #efe3c9;
+      --ink-dim: #9c8a6d;
+      --bg: #0b0907;
+      --panel: #191210;
+      --panel-2: #241a15;
+      --panel-3: #2e211a;
+      --line: #3d2b1f;
+      --accent: #d07c2e;
+      --ember: #ff9a3c;
+      --honor: #86b26a;
+      --dishonor: #c0432f;
+      --blood: #8e2f24;
     }
 
     * { box-sizing: border-box; }
 
+    html, body { height: 100%; }
+
     body {
       margin: 0;
-      min-height: 100vh;
       font-family: Georgia, "Times New Roman", serif;
       color: var(--ink);
       background:
-        radial-gradient(ellipse at 50% -20%, #46301c 0%, transparent 58%),
-        radial-gradient(ellipse at 50% 115%, rgba(201,118,44,.25) 0%, transparent 55%),
-        repeating-linear-gradient(45deg, rgba(255,255,255,.014) 0 2px, transparent 2px 7px),
+        radial-gradient(circle at 50% 108%, rgba(255,140,50,.30) 0%, rgba(255,140,50,.06) 32%, transparent 60%),
+        radial-gradient(circle at 15% 5%, #1d2a3a 0%, transparent 45%),
+        radial-gradient(circle at 85% 0%, #2a1c33 0%, transparent 40%),
+        repeating-linear-gradient(0deg, rgba(255,255,255,.012) 0 2px, transparent 2px 6px),
         var(--bg);
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 18px;
+      padding: 16px;
+      overflow: hidden;
     }
 
+    /* ---------- ateş kıvılcımları ---------- */
+    .embers {
+      position: fixed;
+      inset: 0;
+      pointer-events: none;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .ember-dot {
+      position: absolute;
+      bottom: -14px;
+      width: 3px;
+      height: 3px;
+      border-radius: 50%;
+      background: var(--ember);
+      box-shadow: 0 0 8px 2px rgba(255,154,60,.75);
+      animation: rise linear infinite;
+      opacity: 0;
+    }
+
+    @keyframes rise {
+      0%   { transform: translate(0, 0) scale(.6); opacity: 0; }
+      12%  { opacity: .9; }
+      70%  { opacity: .5; }
+      100% { transform: translate(var(--drift, 30px), -105vh) scale(.2); opacity: 0; }
+    }
+
+    @keyframes flicker {
+      0%, 100% { opacity: .55; }
+      50%      { opacity: .85; }
+    }
+
+    /* ---------- kabuk ---------- */
     .app {
+      position: relative;
+      z-index: 1;
       width: 100%;
-      max-width: 760px;
-      height: min(90vh, 820px);
+      max-width: 880px;
+      height: min(93vh, 900px);
       display: flex;
       flex-direction: column;
-      background: var(--panel);
+      background:
+        linear-gradient(180deg, rgba(255,154,60,.05), transparent 24%),
+        var(--panel);
       border: 2px solid var(--line);
-      outline: 1px solid rgba(201,118,44,.25);
-      outline-offset: 4px;
-      border-radius: 6px;
-      box-shadow: 0 22px 60px rgba(0,0,0,.75), inset 0 0 70px rgba(0,0,0,.5);
+      border-radius: 8px;
+      box-shadow:
+        0 26px 70px rgba(0,0,0,.85),
+        0 0 90px rgba(255,140,50,.10),
+        inset 0 0 80px rgba(0,0,0,.6);
       overflow: hidden;
+    }
+
+    .app::after { /* pencere kenarındaki sıcak ateş ışığı */
+      content: "";
+      position: absolute;
+      left: 0; right: 0; bottom: 0;
+      height: 150px;
+      pointer-events: none;
+      background: radial-gradient(ellipse at 50% 130%, rgba(255,140,50,.22), transparent 70%);
+      animation: flicker 3.4s ease-in-out infinite;
     }
 
     /* ---------- üst bar ---------- */
@@ -56,7 +111,8 @@
       align-items: flex-start;
       justify-content: space-between;
       gap: 14px;
-      padding: 14px 18px;
+      flex-wrap: wrap;
+      padding: 13px 18px;
       border-bottom: 2px solid var(--line);
       background: linear-gradient(180deg, #33251a, var(--panel));
     }
@@ -67,15 +123,15 @@
       letter-spacing: 2.5px;
       text-transform: uppercase;
       color: var(--accent);
-      text-shadow: 0 1px 0 #000, 0 0 22px rgba(201,118,44,.35);
+      text-shadow: 0 1px 0 #000, 0 0 22px rgba(208,124,46,.45);
     }
 
     header p {
       margin: 5px 0 0;
       font-size: 12px;
-      letter-spacing: .6px;
+      letter-spacing: .5px;
       color: var(--ink-dim);
-      max-width: 380px;
+      max-width: 420px;
       line-height: 1.5;
     }
 
@@ -86,19 +142,8 @@
       flex-shrink: 0;
     }
 
-    .year-badge {
-      padding: 6px 11px;
-      font-size: 13px;
-      letter-spacing: 2px;
-      color: var(--ink);
-      background: #1a1209;
-      border: 1px solid var(--line);
-      border-radius: 3px;
-      box-shadow: inset 0 0 12px rgba(0,0,0,.7);
-    }
-
     .burn {
-      padding: 7px 12px;
+      padding: 8px 12px;
       font-family: inherit;
       font-size: 12px;
       letter-spacing: 1px;
@@ -111,32 +156,105 @@
       transition: filter .15s ease, box-shadow .15s ease;
     }
 
-    .burn:hover {
-      filter: brightness(1.25);
-      box-shadow: 0 0 14px rgba(255,140,50,.45);
+    .burn:hover { filter: brightness(1.25); box-shadow: 0 0 14px rgba(255,140,50,.5); }
+
+    /* ---------- yıl seçici ---------- */
+    .year-strip {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 9px 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(0,0,0,.32);
+      flex-wrap: wrap;
     }
 
-    /* ---------- karakterler ---------- */
-    .chars {
+    .year-strip .label {
+      font-size: 10.5px;
+      letter-spacing: 1.6px;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      margin-right: 2px;
+    }
+
+    .year {
+      padding: 5px 13px;
+      font-family: inherit;
+      font-size: 13px;
+      letter-spacing: 1.5px;
+      color: var(--ink-dim);
+      background: #140d09;
+      border: 1px solid var(--line);
+      border-radius: 20px;
+      cursor: pointer;
+      transition: all .16s ease;
+    }
+
+    .year:hover { color: var(--ink); border-color: var(--accent); }
+
+    .year.active {
+      color: #1c1108;
+      background: linear-gradient(180deg, #e39a49, var(--accent));
+      border-color: #8c5318;
+      font-weight: bold;
+      box-shadow: 0 0 16px rgba(208,124,46,.35);
+    }
+
+    /* ---------- mod seçici ---------- */
+    .mode-strip {
       display: flex;
-      gap: 10px;
+      gap: 0;
+      padding: 0 18px;
+      border-bottom: 1px solid var(--line);
+      background: rgba(0,0,0,.18);
+    }
+
+    .mode {
+      padding: 10px 18px;
+      font-family: inherit;
+      font-size: 12.5px;
+      letter-spacing: 1.4px;
+      text-transform: uppercase;
+      color: var(--ink-dim);
+      background: transparent;
+      border: none;
+      border-bottom: 2px solid transparent;
+      cursor: pointer;
+      transition: all .16s ease;
+    }
+
+    .mode:hover { color: var(--ink); }
+
+    .mode.active {
+      color: var(--accent);
+      border-bottom-color: var(--accent);
+      text-shadow: 0 0 14px rgba(208,124,46,.5);
+    }
+
+    /* ---------- kadro ---------- */
+    .roster {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(168px, 1fr));
+      gap: 8px;
       padding: 12px 14px;
       border-bottom: 1px solid var(--line);
-      background: rgba(0,0,0,.22);
-      overflow-x: auto;
+      background: rgba(0,0,0,.24);
+      max-height: 216px;
+      overflow-y: auto;
     }
 
+    .roster.group-mode .char { opacity: .5; cursor: default; }
+    .roster.group-mode .char:hover { transform: none; border-color: var(--line); }
+
     .char {
-      flex: 1 1 0;
-      min-width: 150px;
       display: flex;
       align-items: center;
       gap: 10px;
       cursor: pointer;
       text-align: left;
-      padding: 9px 11px;
+      padding: 8px 10px;
       border: 1px solid var(--line);
-      border-radius: 4px;
+      border-radius: 5px;
       background: var(--panel-2);
       color: var(--ink-dim);
       font-family: inherit;
@@ -149,40 +267,64 @@
       height: 34px;
       display: grid;
       place-items: center;
-      font-size: 12px;
-      letter-spacing: 1px;
+      font-size: 11.5px;
+      letter-spacing: .5px;
       color: var(--ink-dim);
       border: 1px dashed var(--line);
       border-radius: 50%;
-      background: #1a1209;
+      background: #140d09;
     }
 
-    .char strong { display: block; font-size: 13.5px; color: var(--ink); }
+    .char .info { min-width: 0; }
+
+    .char strong {
+      display: block;
+      font-size: 13px;
+      color: var(--ink);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
     .char em {
       display: block;
-      margin-top: 2px;
-      font-size: 10.5px;
+      margin-top: 3px;
+      font-size: 9.5px;
       font-style: normal;
-      letter-spacing: 1.2px;
+      letter-spacing: 1.1px;
       text-transform: uppercase;
       color: var(--ink-dim);
     }
+
+    .tag {
+      display: inline-block;
+      margin-top: 4px;
+      padding: 1px 6px;
+      font-size: 9px;
+      letter-spacing: 1px;
+      border-radius: 2px;
+      text-transform: uppercase;
+    }
+
+    .tag.honor    { color: #d5f0c4; background: rgba(134,178,106,.22); border: 1px solid var(--honor); }
+    .tag.dishonor { color: #ffd3cb; background: rgba(192,67,47,.24);  border: 1px solid var(--dishonor); }
 
     .char:hover { border-color: var(--accent); transform: translateY(-1px); }
 
     .char.active {
       background: linear-gradient(180deg, #432c19, #33220f);
       border-color: var(--accent);
-      box-shadow: inset 0 0 20px rgba(201,118,44,.25), 0 0 12px rgba(201,118,44,.18);
+      box-shadow: inset 0 0 22px rgba(208,124,46,.25), 0 0 14px rgba(208,124,46,.2);
     }
 
     .char.active .monogram { border-style: solid; border-color: var(--accent); color: var(--accent); }
+    .char.active strong { color: #fff3e0; }
 
     /* ---------- sohbet ---------- */
     .chat {
       flex: 1;
       overflow-y: auto;
-      padding: 18px 16px;
+      padding: 18px 16px 22px;
       display: flex;
       flex-direction: column;
       gap: 13px;
@@ -193,8 +335,8 @@
 
     .row { display: flex; gap: 9px; align-items: flex-end; }
     .row.user { justify-content: flex-end; }
-    .row.note { justify-content: center; }
-    .row.err { justify-content: center; }
+    .row.note, .row.err { justify-content: center; }
+    .row.bot + .row.bot { margin-top: -4px; }
 
     .avatar {
       flex-shrink: 0;
@@ -203,12 +345,14 @@
       display: grid;
       place-items: center;
       font-size: 10.5px;
-      letter-spacing: .5px;
       color: var(--accent);
       border: 1px solid var(--line);
       border-radius: 50%;
-      background: #1a1209;
+      background: #140d09;
     }
+
+    .avatar.honor    { border-color: var(--honor); color: var(--honor); }
+    .avatar.dishonor { border-color: var(--dishonor); color: #f0a294; }
 
     .bubble {
       position: relative;
@@ -233,6 +377,10 @@
 
     .bubble.bot { background: var(--panel-2); border-left: 2px solid var(--accent); }
     .bubble.bot .who { color: var(--accent); }
+    .bubble.bot.honor    { border-left-color: var(--honor); }
+    .bubble.bot.honor .who { color: var(--honor); }
+    .bubble.bot.dishonor { border-left-color: var(--dishonor); }
+    .bubble.bot.dishonor .who { color: #e58275; }
 
     .bubble.user {
       background: #30241a;
@@ -248,7 +396,7 @@
       font-size: 12.5px;
       font-style: italic;
       color: var(--ink-dim);
-      background: rgba(0,0,0,.28);
+      background: rgba(0,0,0,.3);
       border-style: dashed;
       border-radius: 20px;
     }
@@ -257,7 +405,7 @@
       max-width: 100%;
       font-size: 13px;
       color: #f4bcb4;
-      background: rgba(168,52,42,.18);
+      background: rgba(142,47,36,.2);
       border-color: var(--blood);
     }
 
@@ -276,7 +424,7 @@
       font-family: inherit;
       font-size: 15px;
       color: var(--ink);
-      background: #150e09;
+      background: #120c08;
       border: 1px solid var(--line);
       border-radius: 4px;
       outline: none;
@@ -292,7 +440,7 @@
       letter-spacing: 1.2px;
       text-transform: uppercase;
       color: #1a120b;
-      background: linear-gradient(180deg, #dd9040, var(--accent));
+      background: linear-gradient(180deg, #e39a49, var(--accent));
       border: 1px solid #8c5318;
       border-radius: 4px;
       cursor: pointer;
@@ -302,14 +450,28 @@
     button.send:hover { filter: brightness(1.12); }
     button.send:disabled { opacity: .45; cursor: not-allowed; }
 
-    .chat::-webkit-scrollbar, .chars::-webkit-scrollbar { width: 8px; height: 8px; }
-    .chat::-webkit-scrollbar-thumb, .chars::-webkit-scrollbar-thumb {
+    .chat::-webkit-scrollbar, .roster::-webkit-scrollbar { width: 8px; }
+    .chat::-webkit-scrollbar-thumb, .roster::-webkit-scrollbar-thumb {
       background: var(--line);
       border-radius: 4px;
+    }
+
+    @media (max-width: 560px) {
+      body { padding: 0; }
+      .app { height: 100vh; max-width: 100%; border-radius: 0; border-width: 0; }
+      header { padding: 11px 13px; }
+      header h1 { font-size: 16px; }
+      header p { font-size: 11px; }
+      .roster { grid-template-columns: 1fr 1fr; max-height: 200px; padding: 10px; gap: 6px; }
+      .char strong { font-size: 12px; }
+      .bubble { max-width: 86%; font-size: 14.5px; }
+      button.send { padding: 11px 14px; }
     }
   </style>
 </head>
 <body>
+  <div class="embers" id="embers"></div>
+
   <div class="app">
     <header>
       <div>
@@ -317,29 +479,40 @@
         <p id="subtitle">Kamp ateşinin başında kiminle konuşmak istersin?</p>
       </div>
       <div class="header-right">
-        <span class="year-badge" id="yearBadge">1899</span>
         <button class="burn" type="button" id="burn" title="Sohbeti ateşe ver">Sohbeti Yak</button>
       </div>
     </header>
 
-    <div class="chars" id="chars">
+    <div class="year-strip">
+      <span class="label">Yıl</span>
+      {% for y in years %}
+      <button class="year{% if y == default_year %} active{% endif %}" type="button" data-year="{{ y }}">{{ y }}</button>
+      {% endfor %}
+    </div>
+
+    <div class="mode-strip">
+      <button class="mode active" type="button" data-mode="single">Tek Kişi</button>
+      <button class="mode" type="button" data-mode="group">Kamp Grubu</button>
+    </div>
+
+    <div class="roster" id="roster">
       {% for key, p in personas.items() %}
-      <button class="char{% if loop.first %} active{% endif %}" type="button"
-              data-key="{{ key }}" data-name="{{ p.name }}" data-year="{{ p.year }}" data-short="{{ p.short }}">
+      <button class="char" type="button"
+              data-key="{{ key }}" data-name="{{ p.name }}" data-short="{{ p.short }}"
+              data-align="{{ p.align }}" data-blurb="{{ p.blurb }}">
         <span class="monogram">{{ p.short }}</span>
-        <span>
+        <span class="info">
           <strong>{{ p.name }}</strong>
-          <em>{{ p.title }} · {{ p.year }}</em>
+          <em>{{ p.title }}</em>
+          {% if p.align != 'neutral' %}
+          <span class="tag {{ p.align }}">{{ 'Onurlu' if p.align == 'honor' else 'Onursuz' }}</span>
+          {% endif %}
         </span>
       </button>
       {% endfor %}
     </div>
 
-    <div class="chat" id="chat">
-      <div class="row note">
-        <div class="bubble note">Kamp ateşi çıtırdıyor. Yukarıdan birini seç, sonra lafa gir.</div>
-      </div>
-    </div>
+    <div class="chat" id="chat"></div>
 
     <form id="form" autocomplete="off">
       <input type="text" id="input" placeholder="Bir şeyler yaz, evlat..." maxlength="400">
@@ -348,48 +521,56 @@
   </div>
 
   <script>
-    const chatEl = document.getElementById('chat');
-    const formEl = document.getElementById('form');
-    const inputEl = document.getElementById('input');
-    const sendEl = document.getElementById('send');
-    const charsEl = document.getElementById('chars');
-    const burnEl = document.getElementById('burn');
-    const yearBadge = document.getElementById('yearBadge');
-    const subtitle = document.getElementById('subtitle');
+    const chatEl    = document.getElementById('chat');
+    const formEl    = document.getElementById('form');
+    const inputEl   = document.getElementById('input');
+    const sendEl    = document.getElementById('send');
+    const rosterEl  = document.getElementById('roster');
+    const burnEl    = document.getElementById('burn');
+    const subtitle  = document.getElementById('subtitle');
+    const modeBtns  = document.querySelectorAll('.mode');
+    const yearBtns  = document.querySelectorAll('.year');
 
-    const activeBtn = () => charsEl.querySelector('.char.active');
-
-    let character = activeBtn().dataset.key;
+    let mode = 'single';
+    let year = document.querySelector('.year.active').dataset.year;
+    let character = 'arthur_honor';
+    let history = [];          // { role: 'user'|'bot', name, text }
     let busy = false;
 
-    function useCharacter(btn) {
-      charsEl.querySelectorAll('.char').forEach(b => b.classList.remove('active'));
-      btn.classList.add('active');
-      character = btn.dataset.key;
-      yearBadge.textContent = btn.dataset.year;
-      subtitle.textContent = btn.dataset.year + ' — ateşin başında ' +
-        btn.dataset.name + ' ile konuşuyorsun.';
-      inputEl.placeholder = 'Bir şeyler yaz, ' + (btn.dataset.name.startsWith('John') ? 'bay' : 'evlat') + '...';
-    }
+    const cards = () => rosterEl.querySelectorAll('.char');
+    const charData = (key) => [...cards()].find(c => c.dataset.key === key);
 
-    charsEl.addEventListener('click', (e) => {
-      const btn = e.target.closest('.char');
-      if (btn) useCharacter(btn);
-    });
+    /* ---------- kıvılcımlar ---------- */
+    (function makeEmbers() {
+      const wrap = document.getElementById('embers');
+      for (let i = 0; i < 16; i++) {
+        const d = document.createElement('span');
+        d.className = 'ember-dot';
+        d.style.left = (5 + Math.random() * 90) + '%';
+        d.style.animationDuration = (7 + Math.random() * 8) + 's';
+        d.style.animationDelay = (Math.random() * 10) + 's';
+        d.style.setProperty('--drift', (Math.random() * 80 - 40) + 'px');
+        wrap.appendChild(d);
+      }
+    })();
 
-    function addMessage(text, kind, who, initials) {
+    /* ---------- sohbet çizimi ---------- */
+    function addMessage(text, kind, who, initials, align) {
       const row = document.createElement('div');
       row.className = 'row ' + kind;
 
       if (kind === 'bot') {
         const av = document.createElement('div');
-        av.className = 'avatar';
+        av.className = 'avatar ' + (align || '');
         av.textContent = initials || '··';
         row.appendChild(av);
       }
 
       const bubble = document.createElement('div');
-      bubble.className = 'bubble ' + kind + (kind === 'bot' && text === '…' ? ' typing' : '');
+      bubble.className = 'bubble ' + kind +
+        (kind === 'bot' && align ? ' ' + align : '') +
+        (kind === 'bot' && text === '…' ? ' typing' : '');
+
       if (who) {
         const label = document.createElement('span');
         label.className = 'who';
@@ -404,17 +585,81 @@
       return row;
     }
 
-    function burnChat() {
+    function note(text) { return addMessage(text, 'note'); }
+
+    /* ---------- seçim / mod / yıl ---------- */
+    function selectCharacter(key) {
+      const card = charData(key);
+      if (!card) return;
+      cards().forEach(c => c.classList.remove('active'));
+      card.classList.add('active');
+      character = key;
+      if (mode === 'single') {
+        subtitle.textContent = year + ' — ateşin başında ' + card.dataset.name + ' ile konuşuyorsun.';
+        inputEl.placeholder = 'Bir şeyler yaz, ' + card.dataset.name.split(' ')[0] + '...';
+      }
+    }
+
+    function setMode(next) {
+      mode = next;
+      modeBtns.forEach(b => b.classList.toggle('active', b.dataset.mode === next));
+      rosterEl.classList.toggle('group-mode', next === 'group');
+      if (next === 'group') {
+        subtitle.textContent = year + ' — kamp toplandı. Sorunu sor, ateşin etrafındakiler cevap verecek.';
+        inputEl.placeholder = 'Kampa bir şey sor...';
+      } else {
+        const card = charData(character) || cards()[0];
+        subtitle.textContent = year + ' — ateşin başında ' + card.dataset.name + ' ile konuşuyorsun.';
+        inputEl.placeholder = 'Bir şeyler yaz, ' + card.dataset.name.split(' ')[0] + '...';
+      }
+    }
+
+    function setYear(next) {
+      if (next === year) return;
+      year = next;
+      yearBtns.forEach(b => b.classList.toggle('active', b.dataset.year === next));
+      history = [];
+      chatEl.innerHTML = '';
+      note('Takvim ' + year + ' yılını gösteriyor. Kamp baştan kuruldu, kimse öncekini hatırlamıyor.');
+      if (mode === 'single') {
+        const card = charData(character);
+        if (card) subtitle.textContent = year + ' — ateşin başında ' + card.dataset.name + ' ile konuşuyorsun.';
+      } else {
+        subtitle.textContent = year + ' — kamp toplandı. Sorunu sor, ateşin etrafındakiler cevap verecek.';
+      }
+    }
+
+    rosterEl.addEventListener('click', (e) => {
+      const btn = e.target.closest('.char');
+      if (!btn || mode === 'group') return;
+      selectCharacter(btn.dataset.key);
+    });
+
+    modeBtns.forEach(b => b.addEventListener('click', () => setMode(b.dataset.mode)));
+    yearBtns.forEach(b => b.addEventListener('click', () => setYear(b.dataset.year)));
+
+    /* ---------- sohbeti yak ---------- */
+    burnEl.addEventListener('click', () => {
       if (busy) return;
       chatEl.classList.add('burning');
       setTimeout(() => {
         chatEl.innerHTML = '';
         chatEl.classList.remove('burning');
-        addMessage('Sohbeti ateşe attın, kül oldu. Baştan başlayalım.', 'note');
+        history = [];
+        note('Sohbeti ateşe attın, kül oldu. Baştan başlayalım.');
       }, 420);
-    }
+    });
 
-    burnEl.addEventListener('click', burnChat);
+    /* ---------- gönderme ---------- */
+    function renderReplies(list) {
+      list.forEach((r, i) => {
+        setTimeout(() => {
+          addMessage(r.reply, 'bot', r.name + ' · ' + r.title, r.short, r.align);
+          history.push({ role: 'bot', name: r.name, text: r.reply });
+          if (history.length > 20) history = history.slice(-20);
+        }, i * 260);
+      });
+    }
 
     formEl.addEventListener('submit', async (e) => {
       e.preventDefault();
@@ -425,26 +670,39 @@
       sendEl.disabled = true;
       inputEl.value = '';
       addMessage(message, 'user');
+      // Sunucu son mesajı kendisi ekliyor; geçmişte tekrar etmesin diye önceki satırlar gönderilir
+      const past = history.slice(-10);
+      history.push({ role: 'user', name: 'Sen', text: message });
+      if (history.length > 20) history = history.slice(-20);
 
-      const btn = activeBtn();
-      const loading = addMessage('…', 'bot', btn.dataset.name + ' · ' + btn.dataset.year, btn.dataset.short);
+      const waiting = addMessage(
+        '…', 'bot',
+        mode === 'group' ? 'Kamp · lafa karışıyorlar' : null,
+        null, null
+      );
 
       try {
         const res = await fetch('/chat', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: message, character: character })
+          body: JSON.stringify({
+            message: message,
+            mode: mode,
+            year: year,
+            characters: [...cards()].map(c => c.dataset.key).filter(k => mode === 'group' || k === character),
+            history: past
+          })
         });
         const data = await res.json().catch(() => ({}));
-        loading.remove();
+        waiting.remove();
 
         if (!res.ok || data.error) {
           addMessage(data.error || 'Bilinmeyen bir hata oluştu.', 'err');
         } else {
-          addMessage(data.reply, 'bot', data.name + ' · ' + data.year, data.short);
+          renderReplies(data.replies || []);
         }
       } catch (err) {
-        loading.remove();
+        waiting.remove();
         addMessage('Bağlantı kurulamadı: ' + err.message, 'err');
       } finally {
         busy = false;
@@ -452,6 +710,11 @@
         inputEl.focus();
       }
     });
+
+    /* ---------- başlangıç ---------- */
+    selectCharacter('arthur_honor');
+    setMode('single');
+    note('Kamp ateşi çıtırdıyor. Yukarıdan birini seç, sonra lafa gir.');
   </script>
 </body>
 </html>
